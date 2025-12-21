@@ -1,2 +1,3 @@
 version: v2
-locks: {}
+locks:
+  f/test/hello_world: 660d2d47384298fb76f3a0a8459450e4c726dac12af9d7d92649e53da5b75f56

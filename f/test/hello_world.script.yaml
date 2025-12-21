@@ -1,0 +1,13 @@
+summary: Hello World test script
+description: A simple script to validate Windmill sync is working
+lock: '!inline f/test/hello_world.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name to greet
+      default: World
+      originalType: string
+  required: []
