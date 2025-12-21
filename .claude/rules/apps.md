@@ -7,9 +7,14 @@ paths:
 
 These folders contain Windmill Apps - internal tools with UI components.
 
+> **Docs**: https://www.windmill.dev/docs/apps/app_editor
+
 ## Remote
-- **URL**: https://windmill.run8n.xyz/
-- **Workspace ID**: windmill_automations
+
+| Property | Value |
+|----------|-------|
+| URL | https://windmill.run8n.xyz/ |
+| Workspace ID | `windmill_automations` |
 
 ## Folder Structure
 
@@ -29,14 +34,20 @@ my_app.app/
 └── inline_script_0.py  # Inline scripts (if any)
 ```
 
+> **Docs**: https://www.windmill.dev/docs/apps/app_configuration
+
 ## Creating New Apps
 
-Use the Windmill UI for initial app creation (visual builder), then:
+Apps are best created in the Windmill UI (visual builder), then synced:
+
 ```bash
+# After creating app in UI
 wmill sync pull   # Pull to local
-# Edit locally
-wmill sync push   # Push changes
+# Edit locally if needed
+wmill sync push   # Push changes back
 ```
+
+> **Docs**: https://www.windmill.dev/docs/apps/app_editor
 
 ## Naming Conventions
 
@@ -44,19 +55,32 @@ wmill sync push   # Push changes
 - Use lowercase with underscores
 - Group related apps in subdirectories
 
-## Common Patterns
+## Common App Patterns
 
 ### Data Display App
-- Fetch data from resources
-- Display in tables/charts
-- Add filters and search
+- Fetch data from resources via backend scripts
+- Display in tables/charts using components
+- Add filters and search inputs
 
 ### Form App
-- Input validation
-- Submit to API/database
-- Success/error handling
+- Input validation with component properties
+- Submit to API/database via runnable
+- Success/error handling with conditional display
 
 ### Dashboard App
-- Multiple data sources
-- Real-time updates
-- KPI widgets
+- Multiple data sources with parallel runnables
+- Real-time updates with refresh intervals
+- KPI widgets using text/stat components
+
+## App Components Reference
+
+| Component | Use Case |
+|-----------|----------|
+| Table | Display tabular data |
+| Form | Collect user input |
+| Button | Trigger actions |
+| Text | Display static/dynamic text |
+| Chart | Visualize data |
+| Container | Layout grouping |
+
+> **Docs**: https://www.windmill.dev/docs/apps/app_configuration#components
