@@ -17,3 +17,14 @@ skipResources: true    # Keep connections in Windmill UI
 skipSecrets: true      # NEVER put secrets in git
 includeSchedules: true # Sync schedule definitions
 includeTriggers: true  # Sync webhook configs
+
+# Git branch configuration
+gitBranches:
+  master:
+    # This branch syncs to production workspace
+    workspaceId: windmill_automations
+    baseUrl: https://windmill.run8n.xyz/
+  # Future: add dev/staging branches pointing to different workspaces
+  # dev:
+  #   workspaceId: windmill_dev
+  #   baseUrl: https://windmill.run8n.xyz/
