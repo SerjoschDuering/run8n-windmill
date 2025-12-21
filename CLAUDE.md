@@ -6,8 +6,10 @@ This repo mirrors a Windmill workspace via `wmill sync`. **Git is the source of 
 
 ```
 f/
-├── automations/  -> Windmill folder /automations/**
-├── _shared/      -> Shared modules/scripts
+├── app_custom/   # Custom Windmill apps
+├── app_groups/   # Group-based apps
+├── app_themes/   # Theming/styling apps
+├── _shared/      # Shared modules (to be created)
 ```
 
 **Remote**: https://windmill.run8n.xyz/ (workspace: `windmill_automations`)
@@ -46,3 +48,4 @@ f/
 See `.claude/rules/` for path-scoped context per project.
 
 @.claude/rules/windmill.md
+@.claude/rules/apps.md
