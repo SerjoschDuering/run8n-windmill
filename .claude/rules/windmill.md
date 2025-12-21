@@ -115,18 +115,34 @@ base_url = wmill.get_variable("f/variables/base_url")
 
 You can call other Windmill scripts from within a script. All scripts in `f/` are available.
 
-### Python
+> **Docs**: https://www.windmill.dev/docs/advanced/clients/python_client
+
+### Python - Synchronous
 
 ```python
 import wmill
 
 def main():
-    # Run another script and get result
-    result = wmill.run_script(
+    # Run another script and wait for result
+    result = wmill.run_script_by_path(
         "f/utils/fetch_data",  # Script path (same as in this repo!)
         args={"param1": "value", "param2": 42}
     )
     return {"fetched": result}
+```
+
+### Python - Async (Background)
+
+```python
+import wmill
+
+def main():
+    # Start script without waiting (returns job UUID)
+    job_id = wmill.run_script_by_path_async(
+        "f/long_running/process_data",
+        args={"batch_id": 123}
+    )
+    return {"started_job": job_id}
 ```
 
 ### TypeScript
@@ -135,8 +151,8 @@ def main():
 import * as wmill from "windmill-client";
 
 export async function main() {
-  // Run another script
-  const result = await wmill.runScript(
+  // Run another script synchronously
+  const result = await wmill.runScriptByPath(
     "f/utils/fetch_data",
     { param1: "value", param2: 42 }
   );
@@ -144,30 +160,29 @@ export async function main() {
 }
 ```
 
-### Async/Background Execution
+### Alternative: Direct Python Imports
+
+You can also import functions directly from other scripts:
 
 ```python
-import wmill
+# Import from another script in the repo
+from f.utils.helpers import my_function
 
 def main():
-    # Start script without waiting (returns job UUID)
-    job_id = wmill.run_script_async(
-        "f/long_running/process_data",
-        args={"batch_id": 123}
-    )
-    return {"started_job": job_id}
+    result = my_function("input")
+    return result
 ```
 
-> **Docs**: https://www.windmill.dev/docs/core_concepts/script_dependencies
+> **Docs**: https://www.windmill.dev/docs/advanced/sharing_common_logic
 
 ## Available Scripts in This Repo
 
 All scripts under `f/` can be called by path:
 
 ```
-f/test/hello_world        → wmill.run_script("f/test/hello_world", {...})
-f/etl/fetch_data          → wmill.run_script("f/etl/fetch_data", {...})
-f/utils/send_notification → wmill.run_script("f/utils/send_notification", {...})
+f/test/hello_world        → wmill.run_script_by_path("f/test/hello_world", {...})
+f/etl/fetch_data          → wmill.run_script_by_path("f/etl/fetch_data", {...})
+f/utils/send_notification → wmill.run_script_by_path("f/utils/send_notification", {...})
 ```
 
 Scripts are synced to Windmill, so any script in this repo is callable.
