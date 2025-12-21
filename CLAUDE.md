@@ -72,6 +72,9 @@ Path-scoped rules in `.claude/rules/` auto-load based on file paths:
 | Git Sync | https://www.windmill.dev/docs/advanced/git_sync |
 | Branch-specific Items | https://www.windmill.dev/docs/advanced/cli/branch-specific-items |
 | wmill.yaml Settings | https://www.windmill.dev/docs/advanced/cli/gitsync-settings |
+| Windmill Hub | https://hub.windmill.dev/ |
+
+**Local Reference**: See `reference_docs/windmill-cli_latest_reference.md` for detailed CLI reference.
 
 ## Troubleshooting
 
