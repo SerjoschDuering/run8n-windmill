@@ -1,3 +1,8 @@
+---
+paths:
+  - f/**
+---
+
 # Windmill Development Rules
 
 When working with Windmill scripts/flows in this repo:

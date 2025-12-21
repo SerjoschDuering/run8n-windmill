@@ -45,7 +45,6 @@ f/
 
 ## Project Rules
 
-See `.claude/rules/` for path-scoped context per project.
-
-@.claude/rules/windmill.md
-@.claude/rules/apps.md
+Path-scoped rules in `.claude/rules/` are auto-loaded based on file paths:
+- `windmill.md` → applies to all `f/**` files
+- `apps.md` → applies to `f/app_*/**` files

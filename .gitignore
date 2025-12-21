@@ -2,9 +2,9 @@
 .DS_Store
 Thumbs.db
 
-# Windmill
-*.lock
+# Windmill workspace config (contains tokens)
 .wmill/
+# NOTE: Do NOT ignore *.lock - Windmill locks should be version-controlled!
 
 # Python
 __pycache__/
