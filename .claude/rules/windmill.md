@@ -83,16 +83,94 @@ This updates lock files with dependency versions. The pre-commit hook does this 
 
 ## Resources & Variables
 
-- Configure in Windmill UI (not in git) - they contain sensitive connection info
-- Reference in code:
-  ```python
-  import wmill
+Resources and variables are configured in Windmill UI (not in git) because they contain sensitive connection info.
 
-  db = wmill.get_resource("f/resources/postgres_db")
-  api_key = wmill.get_variable("f/variables/api_key")
-  ```
+### Using Resources
+
+```python
+import wmill
+
+# Get a typed resource (e.g., PostgreSQL connection)
+db = wmill.get_resource("f/resources/postgres_db")
+# Returns: {"host": "...", "port": 5432, "user": "...", "password": "...", "dbname": "..."}
+
+# Use it
+import psycopg2
+conn = psycopg2.connect(**db)
+```
+
+### Using Variables
+
+```python
+import wmill
+
+# Get a variable (can be secret or plain)
+api_key = wmill.get_variable("f/variables/api_key")
+base_url = wmill.get_variable("f/variables/base_url")
+```
 
 > **Docs**: https://www.windmill.dev/docs/core_concepts/resources_and_types
+
+## Calling Scripts from Scripts
+
+You can call other Windmill scripts from within a script. All scripts in `f/` are available.
+
+### Python
+
+```python
+import wmill
+
+def main():
+    # Run another script and get result
+    result = wmill.run_script(
+        "f/utils/fetch_data",  # Script path (same as in this repo!)
+        args={"param1": "value", "param2": 42}
+    )
+    return {"fetched": result}
+```
+
+### TypeScript
+
+```typescript
+import * as wmill from "windmill-client";
+
+export async function main() {
+  // Run another script
+  const result = await wmill.runScript(
+    "f/utils/fetch_data",
+    { param1: "value", param2: 42 }
+  );
+  return { fetched: result };
+}
+```
+
+### Async/Background Execution
+
+```python
+import wmill
+
+def main():
+    # Start script without waiting (returns job UUID)
+    job_id = wmill.run_script_async(
+        "f/long_running/process_data",
+        args={"batch_id": 123}
+    )
+    return {"started_job": job_id}
+```
+
+> **Docs**: https://www.windmill.dev/docs/core_concepts/script_dependencies
+
+## Available Scripts in This Repo
+
+All scripts under `f/` can be called by path:
+
+```
+f/test/hello_world        → wmill.run_script("f/test/hello_world", {...})
+f/etl/fetch_data          → wmill.run_script("f/etl/fetch_data", {...})
+f/utils/send_notification → wmill.run_script("f/utils/send_notification", {...})
+```
+
+Scripts are synced to Windmill, so any script in this repo is callable.
 
 ## Supported Languages
 
