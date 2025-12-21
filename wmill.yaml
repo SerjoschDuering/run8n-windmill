@@ -1,0 +1,19 @@
+defaultTs: bun
+
+# Sync scope
+includes:
+  - f/**
+
+excludes:
+  - "**/*.tmp"
+  - "**/.DS_Store"
+  - "**/node_modules/**"
+  - "**/__pycache__/**"
+  - "**/.venv/**"
+
+# What to sync (defaults are safe for git)
+skipVariables: true    # Keep env config in Windmill UI
+skipResources: true    # Keep connections in Windmill UI
+skipSecrets: true      # NEVER put secrets in git
+includeSchedules: true # Sync schedule definitions
+includeTriggers: true  # Sync webhook configs

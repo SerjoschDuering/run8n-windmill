@@ -1,0 +1,30 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Windmill
+*.lock
+.wmill/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Node
+node_modules/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Secrets (never commit)
+**/secrets.yaml
+**/*.secret.*
+.env.local
+.env.*.local
