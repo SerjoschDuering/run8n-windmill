@@ -1,0 +1,61 @@
+summary: Austrian Tax Calculator API
+description: >
+  Calculate net income, taxes, and social insurance for Austrian employment,
+
+  freelance, or hybrid scenarios. Reference year 2026.
+
+
+  Webhook URL (sync):
+
+  POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/p/f/api/at_tax_calc
+
+
+  Example: {"gross_monthly": 3000, "revenue": 20000, "children": 1}
+lock: '!inline f/api/at_tax_calc.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    age:
+      type: integer
+      description: Person's age
+      default: 32
+    children:
+      type: integer
+      description: Number of children (for Familienbonus)
+      default: 0
+    expenses:
+      type: number
+      description: Annual business expenses in EUR
+      default: 0
+    gross_monthly:
+      type: number
+      description: Monthly gross salary in EUR
+      default: 0
+    include_context:
+      type: boolean
+      description: Include glossary for AI agents
+      default: true
+    pay_months:
+      type: integer
+      description: Payment months (12 or 14 for Austrian bonus)
+      default: 14
+    pendlerpauschale:
+      type: number
+      description: Annual commuter allowance in EUR
+      default: 0
+    revenue:
+      type: number
+      description: Annual freelance revenue in EUR
+      default: 0
+    state:
+      type: string
+      description: 'Federal state (wien, salzburg, tirol, etc.)'
+      default: wien
+      originalType: string
+    use_pauschal:
+      type: boolean
+      description: Use flat-rate 15% expense deduction
+      default: false
+  required: []
