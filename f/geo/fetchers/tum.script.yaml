@@ -1,0 +1,25 @@
+summary: 'Fetch TUM 3D building heights'
+description: 'Fetches building heights from TUM Global 3D Building Model WFS. Gracefully handles service unavailability.'
+lock: '!inline tum.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    west:
+      type: number
+      description: 'Western longitude bound'
+    south:
+      type: number
+      description: 'Southern latitude bound'
+    east:
+      type: number
+      description: 'Eastern longitude bound'
+    north:
+      type: number
+      description: 'Northern latitude bound'
+  required:
+    - west
+    - south
+    - east
+    - north

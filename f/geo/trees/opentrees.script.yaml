@@ -1,0 +1,25 @@
+summary: 'Fetch OpenTrees municipal tree data'
+description: 'Fetches tree data from municipal inventories aggregated by OpenTrees.org. Returns GeoJSON from cached city datasets when coverage exists.'
+lock: '!inline opentrees.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    west:
+      type: number
+      description: 'Western longitude bound'
+    south:
+      type: number
+      description: 'Southern latitude bound'
+    east:
+      type: number
+      description: 'Eastern longitude bound'
+    north:
+      type: number
+      description: 'Northern latitude bound'
+  required:
+    - west
+    - south
+    - east
+    - north

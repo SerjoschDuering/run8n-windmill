@@ -1,0 +1,177 @@
+summary: "Fetch trees from multiple sources and merge"
+description: |
+  Fetches tree data from OSM + OpenTrees in parallel.
+  Merges with deduplication based on spatial proximity.
+
+  Area limit: 5 km² (use allow_large_area=true to bypass)
+  Typical runtime: ~5-15s for small areas, ~30s for 4km²
+
+  Webhook: POST https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/geo/trees/fetch
+
+  Height Priority:
+  1. OpenTrees measured height (municipal surveys)
+  2. OSM height tag (direct measurement)
+  3. OSM diameter_crown estimate
+  4. OSM circumference estimate (allometric)
+  5. Genus-based default
+  6. Urban average (8m)
+
+  Output Properties (app-compatible):
+  - Height: meters (capital H)
+  - Diameter: canopy diameter meters (capital D)
+  - GlobalID: unique identifier
+
+value:
+  modules:
+    # Step 0: Validate area size
+    - id: validate
+      value:
+        type: rawscript
+        language: python3
+        content: |
+          import math
+
+          def main(west: float, south: float, east: float, north: float, allow_large_area: bool = False):
+              # Calculate area in km²
+              center_lat = (north + south) / 2
+              km_per_deg_lat = 111.32
+              km_per_deg_lon = 111.32 * math.cos(math.radians(center_lat))
+
+              width_km = (east - west) * km_per_deg_lon
+              height_km = (north - south) * km_per_deg_lat
+              area_km2 = width_km * height_km
+
+              MAX_AREA_KM2 = 5.0
+
+              if area_km2 > MAX_AREA_KM2 and not allow_large_area:
+                  raise Exception(f"Area {area_km2:.2f} km² exceeds limit of {MAX_AREA_KM2} km². Set allow_large_area=true to bypass.")
+
+              return {
+                  "area_km2": round(area_km2, 3),
+                  "bbox": {"west": west, "south": south, "east": east, "north": north}
+              }
+        input_transforms:
+          west:
+            type: javascript
+            expr: flow_input.west
+          south:
+            type: javascript
+            expr: flow_input.south
+          east:
+            type: javascript
+            expr: flow_input.east
+          north:
+            type: javascript
+            expr: flow_input.north
+          allow_large_area:
+            type: javascript
+            expr: flow_input.allow_large_area || false
+
+    # Step 1: Fetch all sources in parallel
+    - id: fetch_all
+      value:
+        type: branchall
+        branches:
+          - summary: "Fetch OSM trees"
+            skip_failure: true
+            modules:
+              - id: osm
+                retry:
+                  constant:
+                    attempts: 2
+                    seconds: 5
+                value:
+                  type: script
+                  path: f/geo/trees/osm
+                  input_transforms:
+                    west:
+                      type: javascript
+                      expr: flow_input.west
+                    south:
+                      type: javascript
+                      expr: flow_input.south
+                    east:
+                      type: javascript
+                      expr: flow_input.east
+                    north:
+                      type: javascript
+                      expr: flow_input.north
+
+          - summary: "Fetch OpenTrees data"
+            skip_failure: true
+            modules:
+              - id: opentrees
+                value:
+                  type: script
+                  path: f/geo/trees/opentrees
+                  input_transforms:
+                    west:
+                      type: javascript
+                      expr: flow_input.west
+                    south:
+                      type: javascript
+                      expr: flow_input.south
+                    east:
+                      type: javascript
+                      expr: flow_input.east
+                    north:
+                      type: javascript
+                      expr: flow_input.north
+
+    # Step 2: Merge results
+    - id: merge
+      value:
+        type: script
+        path: f/geo/trees/merge
+        input_transforms:
+          osm_geojson:
+            type: javascript
+            expr: |
+              results.fetch_all[0] || { type: "FeatureCollection", features: [] }
+          opentrees_geojson:
+            type: javascript
+            expr: |
+              results.fetch_all[1] || null
+
+  failure_module:
+    id: on_error
+    value:
+      type: rawscript
+      language: python3
+      content: |
+        def main(error: dict):
+            return {
+                "type": "FeatureCollection",
+                "features": [],
+                "metadata": {
+                    "source": "flow_error",
+                    "error": str(error),
+                    "status": "failed"
+                }
+            }
+
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    west:
+      type: number
+      description: "Western longitude bound"
+    south:
+      type: number
+      description: "Southern latitude bound"
+    east:
+      type: number
+      description: "Eastern longitude bound"
+    north:
+      type: number
+      description: "Northern latitude bound"
+    allow_large_area:
+      type: boolean
+      description: "Allow areas > 5 km² (slower, may hit rate limits)"
+      default: false
+  required:
+    - west
+    - south
+    - east
+    - north

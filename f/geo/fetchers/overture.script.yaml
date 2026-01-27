@@ -1,0 +1,25 @@
+summary: 'Fetch Overture Maps buildings via REST API'
+description: 'Fetches building footprints with heights from Overture Maps hosted API. Fast (~1-2s). Aggregates OSM, Microsoft, Google data.'
+lock: '!inline overture.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    west:
+      type: number
+      description: 'Western longitude bound'
+    south:
+      type: number
+      description: 'Southern latitude bound'
+    east:
+      type: number
+      description: 'Eastern longitude bound'
+    north:
+      type: number
+      description: 'Northern latitude bound'
+  required:
+    - west
+    - south
+    - east
+    - north
