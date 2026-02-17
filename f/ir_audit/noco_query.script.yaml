@@ -1,0 +1,24 @@
+summary: NocoDB query proxy for ir-github-audit plugin
+description: |
+  Accepts a command + args, queries NocoDB, returns results.
+  Used by the Claude Code plugin via HTTP route (no auth).
+lock: '!inline f/ir_audit/noco_query.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    args:
+      type: object
+      description: 'Command arguments (days, since, repo, records)'
+      default: {}
+      properties: {}
+    command:
+      type: string
+      description: >-
+        Query command (recent-commits, recent-prs, org-stats, changed-repos,
+        last-health-date, last-pr-review-date, insert-health, insert-pr-review)
+      default: null
+      originalType: string
+  required:
+    - command

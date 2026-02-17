@@ -1,0 +1,23 @@
+summary: Memory store proxy for ir-dev plugin
+description: |
+  CRUD operations on the memories NocoDB table.
+  Used by Claude Code ir-dev plugin via scoped webhook token.
+  Commands: insert, fetch, resolve, search
+lock: '!inline f/ir_audit/memory_query.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    args:
+      type: object
+      description: Command arguments
+      default: {}
+      properties: {}
+    command:
+      type: string
+      description: 'Command (insert, fetch, resolve, search)'
+      default: null
+      originalType: string
+  required:
+    - command

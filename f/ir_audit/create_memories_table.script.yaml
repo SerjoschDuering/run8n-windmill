@@ -1,0 +1,9 @@
+summary: 'One-off: Create memories table in NocoDB'
+description: Run once to create the memories table. Delete after use.
+lock: '!inline f/ir_audit/create_memories_table.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties: {}
+  required: []

@@ -1,0 +1,29 @@
+summary: Daily GitHub → NocoDB sync for Infrared-city org
+description: |
+  Fetches commits and PRs from all active Infrared-city repos,
+  deduplicates against existing NocoDB records, and inserts new data.
+  Also computes org-level daily stats (lines shipped, contributor count).
+
+  Run daily via cron. Uses 2-day lookback for overlap safety.
+lock: '!inline f/ir_audit/daily_sync.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    github_token:
+      type: string
+      description: GitHub PAT (leave empty to use Windmill variable f/ir_audit/github_pat)
+      default: ''
+      originalType: string
+    lookback_days:
+      type: integer
+      description: Days to look back (2 = yesterday + today for overlap safety)
+      default: 2
+    nocodb_token:
+      type: string
+      description: >-
+        NocoDB xc-token (leave empty to use Windmill variable
+        f/ir_audit/nocodb_token)
+      default: ''
+      originalType: string
+  required: []
