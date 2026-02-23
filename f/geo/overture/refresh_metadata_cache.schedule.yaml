@@ -1,5 +1,5 @@
-summary: Biweekly Overture Maps cache refresh
-schedule: "0 2 * * 1/2"
+summary: Weekly Overture Maps cache refresh check
+schedule: "0 0 2 * * 1"
 timezone: UTC
 script_path: f/geo/overture/refresh_metadata_cache
 is_flow: false
