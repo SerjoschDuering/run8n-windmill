@@ -1,0 +1,58 @@
+summary: Scheduled cleanup of idle connections
+description: >
+  Automatically kills idle database connections on a schedule to prevent
+
+  connection pool exhaustion.
+
+
+  **SAFETY: Disabled by default.** Set enable_cleanup=True to activate.
+
+
+  Recommended schedule: Every 15 minutes
+
+
+  Configuration:
+
+  - max_idle_minutes: How long a connection can be idle before cleanup (default
+  30)
+
+  - enable_cleanup: Must be True to actually kill connections (default False)
+
+
+  Workflow:
+
+  1. Check current connection usage
+
+  2. Find connections idle > max_idle_minutes
+
+  3. Kill them if enable_cleanup=True
+
+  4. Return summary with killed PIDs
+
+
+  Use Cases:
+
+  - Prevent "too many clients" errors
+
+  - Recover from stuck connections automatically
+
+  - Maintain healthy connection pool levels
+lock: '!inline f/db/cleanup_idle_connections.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: Database resource (uses f/resources/run8n_db if not provided)
+      default: null
+      properties: {}
+    enable_cleanup:
+      type: boolean
+      description: Must be True to actually kill connections (SAFETY SWITCH)
+      default: false
+    max_idle_minutes:
+      type: integer
+      description: Kill connections idle longer than this (minutes)
+      default: 30
+  required: []

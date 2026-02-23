@@ -1,0 +1,26 @@
+summary: Check PostgreSQL connection limits and usage
+description: |
+  Health check report showing current connection usage vs maximum allowed.
+
+  Reports:
+  - Total connections vs max_connections
+  - Usage percentage and available capacity
+  - Breakdown by database, user, state, and application
+  - Health status (HEALTHY, CAUTION, WARNING, CRITICAL)
+
+  Health thresholds:
+  - CRITICAL: >= 90% usage (immediate action needed)
+  - WARNING: >= 80% usage (monitor closely)
+  - CAUTION: >= 60% usage (review patterns)
+  - HEALTHY: < 60% usage
+lock: '!inline f/db/check_connection_limits.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: Database resource (uses f/resources/run8n_db if not provided)
+      default: null
+      properties: {}
+  required: []

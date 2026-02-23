@@ -1,0 +1,42 @@
+summary: Terminate stuck/idle PostgreSQL connections
+description: |
+  Safely kills database connections that have been idle for too long.
+
+  **DEFAULT MODE: DRY RUN** - Shows what would be killed without actually
+  terminating connections. Set dry_run=False to actually kill connections.
+
+  Safety features:
+  - Excludes system users (postgres by default)
+  - Never kills own connection
+  - Only targets 'idle' connections
+  - Respects minimum idle time threshold
+
+  Common usage:
+  - min_idle_minutes=30: Kill connections idle > 30 min
+  - min_idle_minutes=60: Kill connections idle > 1 hour
+  - exclude_users=['postgres', 'replication_user']: Protect specific users
+lock: '!inline f/db/kill_stuck_connections.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: Database resource (uses f/resources/run8n_db if not provided)
+      default: null
+      properties: {}
+    dry_run:
+      type: boolean
+      description: 'If true, only show what would be killed (SAFE MODE)'
+      default: true
+    exclude_users:
+      type: object
+      description: List of usernames to never kill (default postgres)
+      default: null
+      items:
+        type: string
+    min_idle_minutes:
+      type: integer
+      description: Kill connections idle longer than this (minutes)
+      default: 30
+  required: []

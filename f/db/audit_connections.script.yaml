@@ -1,0 +1,22 @@
+summary: Audit active PostgreSQL connections
+description: |
+  Shows all active database connections, their state, idle time, and what
+  they're waiting on. Helps identify stuck or long-running connections.
+
+  Use min_idle_seconds to filter for connections idle longer than a threshold
+  (e.g., 1800 = 30 minutes).
+lock: '!inline f/db/audit_connections.script.lock'
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: Database resource (uses f/resources/run8n_db if not provided)
+      default: null
+      properties: {}
+    min_idle_seconds:
+      type: integer
+      description: Only show connections idle longer than this (seconds)
+      default: 0
+  required: []
