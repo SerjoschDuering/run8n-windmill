@@ -157,12 +157,13 @@ def main(
         num_rows = int(row.get("num_rows", 0))
         num_row_groups = int(row.get("num_row_groups", 0))
 
-        # Add to batch
+        # Add to batch (bbox coords passed twice: once for columns, once for ST_MakeEnvelope)
         batch_data.append((
             s3_path,
             s3_bucket,
             s3_key,
-            xmin, ymin, xmax, ymax,
+            xmin, ymin, xmax, ymax,  # For bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax columns
+            xmin, ymin, xmax, ymax,  # For ST_MakeEnvelope function
             release,
             "building",
             num_rows,
@@ -199,7 +200,8 @@ def main(
             """,
             batch_data
         )
-        inserted += len(batch_data)
+        inserted += cur.rowcount  # Use rowcount instead of len(batch_data) to exclude conflicts
+        print(f"Final batch inserted, total: {inserted} files")
 
     conn.commit()
     cur.close()
