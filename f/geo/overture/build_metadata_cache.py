@@ -33,17 +33,21 @@ def main(
     # Get latest release if not specified
     if not release:
         catalog_url = "https://stac.overturemaps.org/catalog.json"
-        catalog = requests.get(catalog_url).json()
-        # Get latest release from links
-        release_links = [
-            link for link in catalog.get("links", [])
-            if link.get("rel") == "child" and "release" in link.get("href", "")
-        ]
-        if not release_links:
-            return {"error": "No releases found in STAC catalog"}
-        # Extract release from URL (last path component)
-        latest_link = release_links[-1]["href"]
-        release = latest_link.rstrip("/").split("/")[-1]
+        catalog = requests.get(catalog_url, timeout=30).json()
+        # Get latest release from catalog
+        release = catalog.get("latest")
+        if not release:
+            # Fallback: get from links
+            release_links = [
+                link for link in catalog.get("links", [])
+                if link.get("rel") == "child" and link.get("latest") == True
+            ]
+            if release_links:
+                # Extract release from URL
+                latest_link = release_links[0]["href"]
+                release = latest_link.replace("./", "").split("/")[0]
+            else:
+                return {"error": "No releases found in STAC catalog"}
 
     print(f"Using Overture Maps release: {release}")
 

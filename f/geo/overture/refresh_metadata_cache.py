@@ -27,25 +27,20 @@ def main(db: dict) -> dict:
         catalog_url = "https://stac.overturemaps.org/catalog.json"
         catalog = requests.get(catalog_url, timeout=30).json()
 
-        # Get releases from links
-        release_links = [
-            link for link in catalog.get("links", [])
-            if link.get("rel") == "child" and "release" in link.get("href", "")
-        ]
-
-        if not release_links:
-            return {"error": "No releases found in STAC catalog"}
-
-        # Extract release IDs from URLs
-        releases = []
-        for link in release_links:
-            href = link.get("href", "")
-            release_id = href.rstrip("/").split("/")[-1]
-            releases.append(release_id)
-
-        latest_release = releases[-1] if releases else None
+        # Get latest release directly from catalog
+        latest_release = catalog.get("latest")
         if not latest_release:
-            return {"error": "Could not determine latest release"}
+            # Fallback: get from links
+            release_links = [
+                link for link in catalog.get("links", [])
+                if link.get("rel") == "child" and link.get("latest") == True
+            ]
+            if release_links:
+                # Extract release from URL
+                latest_link = release_links[0]["href"]
+                latest_release = latest_link.replace("./", "").split("/")[0]
+            else:
+                return {"error": "No releases found in STAC catalog"}
 
         print(f"Latest release from STAC: {latest_release}")
 
