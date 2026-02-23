@@ -111,13 +111,16 @@ def main(
     batch_data = []
 
     for idx, row in building_files.iterrows():
-        # Extract bbox coordinates
-        bbox = row.get("bbox", [])
-        if len(bbox) != 4:
+        # Extract bbox coordinates (bbox is a dict with keys: xmin, ymin, xmax, ymax)
+        bbox = row.get("bbox", {})
+        if not isinstance(bbox, dict) or not all(k in bbox for k in ['xmin', 'ymin', 'xmax', 'ymax']):
             print(f"Warning: Invalid bbox for file {idx}, skipping")
             continue
 
-        xmin, ymin, xmax, ymax = float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])
+        xmin = float(bbox['xmin'])
+        ymin = float(bbox['ymin'])
+        xmax = float(bbox['xmax'])
+        ymax = float(bbox['ymax'])
 
         # Extract S3 path from assets
         assets = row.get("assets", {})
