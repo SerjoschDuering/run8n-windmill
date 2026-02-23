@@ -1,9 +1,13 @@
 summary: Weekly Overture Maps cache refresh check
-schedule: "0 0 2 * * 1"
-timezone: UTC
-script_path: f/geo/overture/refresh_metadata_cache
-is_flow: false
 args:
   db:
     $res: f/geo/overture/postgres_db
+cron_version: v2
+email: ser.due@me.com
 enabled: true
+is_flow: false
+no_flow_overlap: false
+schedule: 0 0 2 * * 1
+script_path: f/geo/overture/refresh_metadata_cache
+timezone: UTC
+ws_error_handler_muted: false
