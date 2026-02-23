@@ -1,14 +1,19 @@
 summary: Fetch buildings from Overture Maps
 description: >-
   Fetches building footprints from Overture Maps (2.7B buildings globally).
-  Free, no auth needed. Sources: Google + Microsoft + OSM combined.
-  Cache enabled by default for 10x faster queries (6min → 30-60s).
+  Free, no auth needed. Sources: Google + Microsoft + OSM combined. Cache
+  enabled by default for 10x faster queries (6min → 30-60s).
 lock: '!inline f/geo/fetchers/overture.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
   properties:
+    db:
+      type: object
+      description: 'PostgreSQL connection (from resource picker, required if use_cache=True)'
+      default: null
+      properties: {}
     east:
       type: number
       description: Eastern longitude bound
@@ -21,18 +26,14 @@ schema:
       type: number
       description: Southern latitude bound
       default: null
-    west:
-      type: number
-      description: Western longitude bound
-      default: null
     use_cache:
       type: boolean
       description: Use PostgreSQL spatial cache for faster queries (default True)
       default: true
-    db:
-      type: object
-      description: PostgreSQL connection (from resource picker, required if use_cache=True)
-      default: "$res:f/geo/overture/postgres_db"
+    west:
+      type: number
+      description: Western longitude bound
+      default: null
   required:
     - west
     - south

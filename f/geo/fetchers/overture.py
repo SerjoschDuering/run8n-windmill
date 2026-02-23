@@ -13,7 +13,6 @@ import json
 from typing import TypedDict, Optional
 # Import at module level for Windmill dependency detection
 import overturemaps  # noqa: F401
-import geopandas  # noqa: F401
 
 
 class BBox(TypedDict):
