@@ -1,0 +1,18 @@
+path: f/geo/overture/refresh_metadata_cache
+schedule: "0 2 * * 1/2"
+timezone: UTC
+enabled: true
+script_path: f/geo/overture/refresh_metadata_cache
+args:
+  db:
+    $res: f/geo/overture/postgres_db
+summary: Biweekly Overture Maps cache refresh
+on_failure:
+  path: null
+  extra_args: {}
+on_recovery:
+  path: null
+  extra_args: {}
+ws_error_handler_muted: false
+retry:
+  enabled: false

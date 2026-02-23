@@ -1,0 +1,8 @@
+value:
+  host: "run8n-run8n_db-1"
+  port: 5432
+  user: "supabase_admin"
+  password: "CHANGE_ME_IN_WINDMILL_UI"
+  dbname: "postgres"
+  sslmode: "disable"
+resource_type: postgresql

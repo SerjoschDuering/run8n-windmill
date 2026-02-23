@@ -1,0 +1,17 @@
+summary: Auto-refresh Overture Maps metadata cache
+description: |
+  Checks STAC catalog for new Overture Maps releases and updates cache if needed.
+  Automatically triggered biweekly via schedule.
+  Cleans up old releases (keeps last 2 only).
+lock: '!inline refresh_metadata_cache.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: PostgreSQL connection (from resource picker)
+      default: "$res:f/geo/overture/postgres_db"
+  required:
+    - db

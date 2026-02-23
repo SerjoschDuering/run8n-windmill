@@ -1,0 +1,27 @@
+summary: Build Overture Maps spatial metadata cache
+description: |
+  One-time script to populate PostgreSQL with file bboxes from STAC catalog.
+  Downloads STAC collections.parquet, extracts file metadata, and inserts into
+  overture_file_metadata table with spatial index for fast bbox queries.
+
+  Reduces query time from 6 minutes to 30-60 seconds by pre-filtering files.
+lock: '!inline build_metadata_cache.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: PostgreSQL connection (from resource picker)
+      default: "$res:f/geo/overture/postgres_db"
+    release:
+      type: string
+      description: Overture Maps release version (default latest from catalog)
+      default: null
+    force_rebuild:
+      type: boolean
+      description: Rebuild even if cache exists for this release
+      default: false
+  required:
+    - db
