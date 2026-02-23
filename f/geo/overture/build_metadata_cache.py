@@ -117,7 +117,7 @@ def main(
             print(f"Warning: Invalid bbox for file {idx}, skipping")
             continue
 
-        xmin, ymin, xmax, ymax = bbox
+        xmin, ymin, xmax, ymax = float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])
 
         # Extract S3 path from assets
         assets = row.get("assets", {})
