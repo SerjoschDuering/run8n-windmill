@@ -1,0 +1,64 @@
+summary: 'Enrich simulation result with KPIs, rendered image, and S3 upload'
+description: |
+  Fires after a simulation completes. Computes KPIs, renders hi-res image
+  (no pins), uploads to S3, and stores enrichment data in session store.
+  Designed to run asynchronously via start_enrich_async gateway action.
+lock: '!inline f/infrared/enrich_simulation.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    name:
+      type: string
+      description: Simulation name
+      default: null
+      originalType: string
+    analysis_type:
+      type: string
+      description: Type of analysis
+      default: null
+      originalType: string
+    batch_id:
+      type: string
+      description: Batch identifier
+      default: null
+      originalType: string
+    bbox:
+      type: object
+      description: 'Bounding box {west, south, east, north}'
+      default: null
+      properties: {}
+    buildings:
+      type: object
+      description: Optional building GeoJSON
+      default: null
+      properties: {}
+    grid:
+      type: array
+      description: Simulation result grid
+      default: null
+      items:
+        type: string
+      originalType: 'string[]'
+    job_id:
+      type: string
+      description: Simulation job ID
+      default: null
+      originalType: string
+    trees:
+      type: object
+      description: Optional tree GeoJSON
+      default: null
+      properties: {}
+    weather:
+      type: object
+      description: Weather parameters
+      default: null
+      properties: {}
+  required:
+    - batch_id
+    - job_id
+    - grid
+    - bbox
+    - analysis_type

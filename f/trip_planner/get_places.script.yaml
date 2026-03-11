@@ -1,9 +1,0 @@
-summary: ''
-description: ''
-lock: '!inline f/trip_planner/get_places.script.lock'
-kind: script
-schema:
-  $schema: https://json-schema.org/draft/2020-12/schema
-  type: object
-  properties: {}
-  required: []

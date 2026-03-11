@@ -1,6 +1,8 @@
-summary: 'Merge building heights from multiple sources'
-description: 'Matches buildings by centroid and applies height priority: Overture > TUM > OSM > estimated.'
-lock: '!inline merge_heights.script.lock'
+summary: Merge building heights from multiple sources
+description: >-
+  Matches buildings by centroid and applies height priority: Overture > TUM >
+  OSM > estimated.
+lock: '!inline f/geo/processors/merge_heights.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
@@ -8,15 +10,18 @@ schema:
   properties:
     osm_geojson:
       type: object
-      description: 'OSM buildings GeoJSON FeatureCollection (required base)'
-      properties: {}
-    tum_geojson:
-      type: object
-      description: 'TUM buildings GeoJSON (optional)'
+      description: OSM buildings GeoJSON FeatureCollection (required base)
+      default: null
       properties: {}
     overture_geojson:
       type: object
-      description: 'Overture buildings GeoJSON (optional)'
+      description: Overture buildings GeoJSON (optional)
+      default: null
+      properties: {}
+    tum_geojson:
+      type: object
+      description: TUM buildings GeoJSON (optional)
+      default: null
       properties: {}
   required:
     - osm_geojson

@@ -1,3 +1,7 @@
 summary: Infrared GitHub Audit
+display_name: ir_audit
+extra_perms:
+  serjoscha-ir: true
+  u/serdue: true
 owners:
   - serjoscha-ir

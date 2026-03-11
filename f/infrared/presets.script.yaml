@@ -1,0 +1,22 @@
+summary: Get weather presets for UTCI/wind analysis
+description: >
+  Returns standardized weather presets for environmental simulations.
+
+  Each preset includes temperature, humidity, wind, and recommended analysis
+  types.
+
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/infrared/presets
+lock: '!inline f/infrared/presets.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    preset_id:
+      type: string
+      description: 'Optional preset ID to return. If not provided, returns all presets.'
+      default: null
+      originalType: string
+  required: []

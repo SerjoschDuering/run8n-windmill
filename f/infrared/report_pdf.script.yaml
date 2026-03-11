@@ -1,0 +1,115 @@
+summary: Generate PDF report for environmental analysis
+description: >-
+  Creates a professional A4 PDF report with visualization, KPIs, and methodology
+  notes. Supports self-enrichment: pass grids + flags to compute KPIs, Gemini
+  context, AI summary internally.
+lock: '!inline f/infrared/report_pdf.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    agent_notes:
+      type: string
+      description: Optional agent-provided context or instructions
+      default: null
+      originalType: string
+    ai_summary:
+      type: object
+      description: AI-generated JSON summary from Gemini
+      default: null
+      properties: {}
+    analyses:
+      type: object
+      description: 'List of analysis objects with image_base64, kpis, weather, pin_results'
+      default: null
+      items:
+        type: object
+    analysis_type:
+      type: string
+      description: 'Analysis type: utci or wind (single-analysis legacy)'
+      default: null
+      originalType: string
+    bbox:
+      type: object
+      description: 'Bounding box {west, south, east, north}'
+      default: null
+      properties: {}
+    buildings:
+      type: object
+      description: GeoJSON buildings for image rendering
+      default: null
+      properties: {}
+    buildings_count:
+      type: integer
+      description: Number of buildings in analysis
+      default: 0
+    center_lat:
+      type: number
+      description: Center latitude for Gemini context lookup
+      default: null
+    center_lon:
+      type: number
+      description: Center longitude for Gemini context lookup
+      default: null
+    gemini_context:
+      type: object
+      description: Optional site context from Gemini
+      default: null
+      properties: {}
+    image_base64:
+      type: string
+      description: Pre-rendered visualization (single-analysis legacy)
+      default: null
+      originalType: string
+    include_ai_summary:
+      type: boolean
+      description: 'Flag: compute AI summary internally'
+      default: false
+    include_gemini_context:
+      type: boolean
+      description: 'Flag: compute Gemini context internally'
+      default: false
+    kpis:
+      type: object
+      description: Key performance indicators dict (single-analysis legacy)
+      default: null
+      properties: {}
+    location_name:
+      type: string
+      description: Human-readable location name
+      default: null
+      originalType: string
+    pin_results:
+      type: object
+      description: Pin sampling results array
+      default: null
+      items:
+        type: object
+    pins:
+      type: object
+      description: Pin markers for image rendering
+      default: null
+      items:
+        type: object
+    screenshot_base64:
+      type: string
+      description: Optional screenshot from UI
+      default: null
+      originalType: string
+    trees:
+      type: object
+      description: GeoJSON trees for image rendering
+      default: null
+      properties: {}
+    trees_count:
+      type: integer
+      description: Number of trees in analysis
+      default: 0
+    weather:
+      type: object
+      description: Weather conditions dict
+      default: null
+      properties: {}
+  required:
+    - location_name

@@ -1,0 +1,121 @@
+summary: Fetch Overture Maps features (parallel)
+description: >-
+  Fetches multiple Overture Maps feature types in parallel. Each type runs as a
+  separate job on geo workers, then results are merged into one
+  FeatureCollection. Much faster than sequential fetching for multi-type queries
+  (2 geo workers = ~40% faster).
+value:
+  modules:
+    - id: fetch_loop
+      value:
+        type: forloopflow
+        modules:
+          - id: fetch_type
+            value:
+              path: f/geo/fetchers/overture
+              type: script
+              input_transforms:
+                east:
+                  expr: flow_input.east
+                  type: javascript
+                west:
+                  expr: flow_input.west
+                  type: javascript
+                north:
+                  expr: flow_input.north
+                  type: javascript
+                south:
+                  expr: flow_input.south
+                  type: javascript
+                types:
+                  expr: '[flow_input.iter.value]'
+                  type: javascript
+                store_s3:
+                  expr: flow_input.store_s3 ?? true
+                  type: javascript
+                use_cache:
+                  expr: flow_input.use_cache
+                  type: javascript
+        iterator:
+          expr: flow_input.types
+          type: javascript
+        parallel: true
+        parallelism:
+          type: static
+          value: 5
+        skip_failures: true
+    - id: merge
+      value:
+        lock: '!inline inline_script_0.inline_script.lock'
+        type: rawscript
+        content: '!inline inline_script_0.inline_script.py'
+        language: python3
+        input_transforms:
+          bbox:
+            expr: >-
+              ({west: flow_input.west, south: flow_input.south, east:
+              flow_input.east, north: flow_input.north})
+            type: javascript
+          types:
+            expr: flow_input.types
+            type: javascript
+          results:
+            expr: results.fetch_loop
+            type: javascript
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    east:
+      type: number
+      description: Eastern longitude bound
+    north:
+      type: number
+      description: Northern latitude bound
+    south:
+      type: number
+      description: Southern latitude bound
+    types:
+      type: array
+      description: >-
+        Feature types to fetch in parallel — all 15 Overture types supported
+      default:
+        - building
+        - place
+        - land_use
+        - land
+        - water
+      items:
+        type: string
+        enum:
+          - building
+          - building_part
+          - land
+          - water
+          - land_use
+          - land_cover
+          - infrastructure
+          - bathymetry
+          - place
+          - segment
+          - connector
+          - address
+          - division
+          - division_area
+          - division_boundary
+    store_s3:
+      type: boolean
+      description: Write results to S3 and return references
+      default: true
+    use_cache:
+      type: boolean
+      description: Use PostgreSQL spatial cache for faster queries
+      default: true
+    west:
+      type: number
+      description: Western longitude bound
+  required:
+    - west
+    - south
+    - east
+    - north

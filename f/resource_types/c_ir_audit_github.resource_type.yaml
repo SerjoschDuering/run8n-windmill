@@ -1,0 +1,9 @@
+schema:
+  type: object
+  properties:
+    token:
+      type: string
+      description: GitHub PAT with read access to Infrared-city org
+  required:
+    - token
+description: GitHub API token for Infrared-city org audit

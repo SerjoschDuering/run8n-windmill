@@ -1,0 +1,53 @@
+summary: Fast PDF assembly from pre-computed simulation data
+description: |
+  Receives all pre-computed data and assembles a PDF report.
+  Re-renders images with pins (parallel), calls Gemini once for summaries,
+  assembles PDF, uploads to S3. Target: under 90 seconds total.
+lock: '!inline f/infrared/assemble_pdf.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    agent_notes:
+      type: string
+      description: Optional agent-provided context
+      default: null
+      originalType: string
+    analyses:
+      type: array
+      description: 'Pre-computed analysis data with KPIs, image URLs, grids'
+      default: null
+      items:
+        type: string
+      originalType: 'string[]'
+    buildings:
+      type: object
+      description: Building GeoJSON for re-rendering
+      default: null
+      properties: {}
+    center_lat:
+      type: number
+      description: Center latitude
+      default: null
+    center_lon:
+      type: number
+      description: Center longitude
+      default: null
+    location_name:
+      type: string
+      description: Location name for report title
+      default: null
+      originalType: string
+    pins:
+      type: object
+      description: Pin locations for overlay rendering
+      default: null
+    trees:
+      type: object
+      description: Tree GeoJSON for re-rendering
+      default: null
+      properties: {}
+  required:
+    - location_name
+    - analyses

@@ -1,23 +1,29 @@
-summary: 'Fetch OSM trees via Overpass API'
-description: 'Fetches tree points from OpenStreetMap with fallback endpoints. Returns GeoJSON with height estimation cascade.'
-lock: '!inline osm.script.lock'
+summary: Fetch OSM trees via Overpass API
+description: >-
+  Fetches tree points from OpenStreetMap with fallback endpoints. Returns
+  GeoJSON with height estimation cascade.
+lock: '!inline f/geo/trees/osm.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
   properties:
-    west:
-      type: number
-      description: 'Western longitude bound'
-    south:
-      type: number
-      description: 'Southern latitude bound'
     east:
       type: number
-      description: 'Eastern longitude bound'
+      description: Eastern longitude bound
+      default: null
     north:
       type: number
-      description: 'Northern latitude bound'
+      description: Northern latitude bound
+      default: null
+    south:
+      type: number
+      description: Southern latitude bound
+      default: null
+    west:
+      type: number
+      description: Western longitude bound
+      default: null
   required:
     - west
     - south

@@ -1,0 +1,17 @@
+summary: null
+description: null
+authentication_method: api_key
+authentication_resource_path: f/api/env_analysis_api_key
+email: ser.due@me.com
+http_method: post
+is_flow: false
+is_static_website: false
+mode: enabled
+raw_string: false
+request_type: sync
+route_path: env-analysis
+route_path_key: env-analysis
+script_path: f/api/env_analysis_gateway
+static_asset_config: null
+workspaced_route: true
+wrap_body: false

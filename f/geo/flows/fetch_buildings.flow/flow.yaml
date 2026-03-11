@@ -1,163 +1,158 @@
-summary: "Fetch buildings from multiple sources and merge heights"
-description: |
+summary: Fetch buildings from multiple sources and merge heights
+description: >
   Fetches building footprints from OSM + TUM + Overture in parallel.
+
   Merges heights with priority: Overture > TUM > OSM > estimated.
 
+
   Area limit: 5 km² (use allow_large_area=true to bypass)
+
   Typical runtime: ~5-10s for small areas, ~30s for 4km²
 
-  Webhook: POST https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/geo/flows/fetch_buildings
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/geo/flows/fetch_buildings
+
 
   Height Priority:
-  1. Overture height (direct measurement)
-  2. TUM measured height
-  3. OSM height tag
-  4. Overture num_floors * 3
-  5. OSM building:levels * 3
-  6. Estimate by building type/area
 
+  1. Overture height (direct measurement)
+
+  2. TUM measured height
+
+  3. OSM height tag
+
+  4. Overture num_floors * 3
+
+  5. OSM building:levels * 3
+
+  6. Estimate by building type/area
 value:
   modules:
-    # Step 0: Validate area size
     - id: validate
       value:
         type: rawscript
-        language: python3
-        content: |
-          import math
-
-          def main(west: float, south: float, east: float, north: float, allow_large_area: bool = False):
-              # Calculate area in km²
-              center_lat = (north + south) / 2
-              km_per_deg_lat = 111.32
-              km_per_deg_lon = 111.32 * math.cos(math.radians(center_lat))
-
-              width_km = (east - west) * km_per_deg_lon
-              height_km = (north - south) * km_per_deg_lat
-              area_km2 = width_km * height_km
-
-              MAX_AREA_KM2 = 5.0
-
-              if area_km2 > MAX_AREA_KM2 and not allow_large_area:
-                  raise Exception(f"Area {area_km2:.2f} km² exceeds limit of {MAX_AREA_KM2} km². Set allow_large_area=true to bypass.")
-
-              return {
-                  "area_km2": round(area_km2, 3),
-                  "bbox": {"west": west, "south": south, "east": east, "north": north}
-              }
+        content: '!inline inline_script_0.inline_script.py'
         input_transforms:
-          west:
+          allow_large_area:
             type: javascript
-            expr: flow_input.west
-          south:
-            type: javascript
-            expr: flow_input.south
+            expr: flow_input.allow_large_area || false
           east:
             type: javascript
             expr: flow_input.east
           north:
             type: javascript
             expr: flow_input.north
-          allow_large_area:
+          south:
             type: javascript
-            expr: flow_input.allow_large_area || false
-
-    # Step 1: Fetch all sources in parallel
+            expr: flow_input.south
+          west:
+            type: javascript
+            expr: flow_input.west
+        lock: '!inline inline_script_0.inline_script.lock'
+        language: python3
     - id: fetch_all
       value:
         type: branchall
         branches:
-          - summary: "Fetch OSM buildings"
-            skip_failure: true
+          - summary: Fetch OSM buildings
             modules:
               - id: osm
+                value:
+                  type: script
+                  input_transforms:
+                    east:
+                      type: javascript
+                      expr: flow_input.east
+                    north:
+                      type: javascript
+                      expr: flow_input.north
+                    south:
+                      type: javascript
+                      expr: flow_input.south
+                    west:
+                      type: javascript
+                      expr: flow_input.west
+                  path: f/geo/fetchers/osm
                 retry:
                   constant:
                     attempts: 2
                     seconds: 5
-                value:
-                  type: script
-                  path: f/geo/fetchers/osm
-                  input_transforms:
-                    west:
-                      type: javascript
-                      expr: flow_input.west
-                    south:
-                      type: javascript
-                      expr: flow_input.south
-                    east:
-                      type: javascript
-                      expr: flow_input.east
-                    north:
-                      type: javascript
-                      expr: flow_input.north
-
-          - summary: "Fetch TUM buildings"
+                  exponential:
+                    attempts: 0
+                    multiplier: 1
+                    random_factor: null
+                    seconds: 0
+            expr: ''
+            parallel: true
             skip_failure: true
+          - summary: Fetch TUM buildings
             modules:
               - id: tum
                 value:
                   type: script
-                  path: f/geo/fetchers/tum
                   input_transforms:
-                    west:
-                      type: javascript
-                      expr: flow_input.west
-                    south:
-                      type: javascript
-                      expr: flow_input.south
                     east:
                       type: javascript
                       expr: flow_input.east
                     north:
                       type: javascript
                       expr: flow_input.north
-
-          - summary: "Fetch Overture buildings"
+                    south:
+                      type: javascript
+                      expr: flow_input.south
+                    west:
+                      type: javascript
+                      expr: flow_input.west
+                  path: f/geo/fetchers/tum
+            expr: ''
+            parallel: true
             skip_failure: true
+          - summary: Fetch Overture buildings
             modules:
               - id: overture
                 value:
                   type: script
-                  path: f/geo/fetchers/overture
                   input_transforms:
-                    west:
-                      type: javascript
-                      expr: flow_input.west
-                    south:
-                      type: javascript
-                      expr: flow_input.south
                     east:
                       type: javascript
                       expr: flow_input.east
                     north:
                       type: javascript
                       expr: flow_input.north
-
-    # Step 2: Merge results
+                    south:
+                      type: javascript
+                      expr: flow_input.south
+                    west:
+                      type: javascript
+                      expr: flow_input.west
+                  path: f/geo/fetchers/overture
+            expr: ''
+            parallel: true
+            skip_failure: true
+        parallel: true
     - id: merge
       value:
         type: script
-        path: f/geo/processors/merge_heights
         input_transforms:
           osm_geojson:
             type: javascript
-            expr: |
-              results.fetch_all[0] || { type: "FeatureCollection", features: [] }
-          tum_geojson:
-            type: javascript
-            expr: |
-              results.fetch_all[1] || null
+            expr: >
+              results.fetch_all[0] || { type: "FeatureCollection", features: []
+              }
           overture_geojson:
             type: javascript
             expr: |
               results.fetch_all[2] || null
-
+          tum_geojson:
+            type: javascript
+            expr: |
+              results.fetch_all[1] || null
+        path: f/geo/processors/merge_heights
   failure_module:
     id: on_error
     value:
       type: rawscript
-      language: python3
       content: |
         def main(error: dict):
             return {
@@ -169,27 +164,30 @@ value:
                     "status": "failed"
                 }
             }
-
+      input_transforms: {}
+      lock: |
+        # py: 3.12
+      language: python3
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
   properties:
-    west:
-      type: number
-      description: "Western longitude bound"
-    south:
-      type: number
-      description: "Southern latitude bound"
-    east:
-      type: number
-      description: "Eastern longitude bound"
-    north:
-      type: number
-      description: "Northern latitude bound"
     allow_large_area:
       type: boolean
-      description: "Allow areas > 5 km² (slower, may hit rate limits)"
+      description: 'Allow areas > 5 km² (slower, may hit rate limits)'
       default: false
+    east:
+      type: number
+      description: Eastern longitude bound
+    north:
+      type: number
+      description: Northern latitude bound
+    south:
+      type: number
+      description: Southern latitude bound
+    west:
+      type: number
+      description: Western longitude bound
   required:
     - west
     - south

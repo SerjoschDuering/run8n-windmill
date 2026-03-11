@@ -1,0 +1,6 @@
+summary: Infrared.city API integration - UTCI thermal comfort and wind CFD simulations
+display_name: infrared
+extra_perms:
+  u/serdue: true
+owners:
+  - u/serdue

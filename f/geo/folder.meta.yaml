@@ -1,1 +1,4 @@
-summary: "Geo data utilities - building fetchers and height merging"
+summary: Tree data fetching from OSM and OpenTrees
+display_name: Trees
+extra_perms: {}
+owners: []

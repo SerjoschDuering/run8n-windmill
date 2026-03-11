@@ -1,0 +1,14 @@
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    api_key:
+      type: string
+      description: "Overture Maps API key"
+    base_url:
+      type: string
+      description: "API base URL"
+      default: "https://api.overturemapsapi.com"
+  required:
+    - api_key
+description: "Overture Maps API credentials"

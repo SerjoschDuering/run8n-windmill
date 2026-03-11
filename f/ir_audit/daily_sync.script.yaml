@@ -6,6 +6,7 @@ description: |
 
   Run daily via cron. Uses 2-day lookback for overlap safety.
 lock: '!inline f/ir_audit/daily_sync.script.lock'
+kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object

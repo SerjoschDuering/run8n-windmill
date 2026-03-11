@@ -8,19 +8,20 @@ and triggers cache builder for new releases. Cleans up old releases (keeps last 
 import requests
 import psycopg2
 import wmill
-from typing import Optional
+
+CACHE_DB_RESOURCE = "f/geo/overture/postgres_db"
 
 
-def main(db: dict) -> dict:
+def main() -> dict:
     """
     Check for new Overture Maps releases and update cache if needed.
 
-    Args:
-        db: PostgreSQL resource (from Windmill resource picker)
+    DB connection auto-resolved from Windmill resource.
 
     Returns:
         dict with update status, latest release, and cached releases
     """
+    db = wmill.get_resource(CACHE_DB_RESOURCE)
 
     # Get latest release from STAC catalog
     try:
@@ -78,11 +79,9 @@ def main(db: dict) -> dict:
     print("Triggering cache builder...")
 
     try:
-        # Run cache builder script with new release
         result = wmill.run_script_by_path(
             "f/geo/overture/build_metadata_cache",
             args={
-                "db": db,
                 "release": latest_release,
                 "force_rebuild": False
             }
@@ -95,7 +94,7 @@ def main(db: dict) -> dict:
                 "cached_releases": cached_releases
             }
 
-        print(f"✓ Cache built for release {latest_release}")
+        print(f"Cache built for release {latest_release}")
         cached_releases.append(latest_release)
 
     except Exception as e:
@@ -126,7 +125,6 @@ def main(db: dict) -> dict:
             cur.close()
             conn.close()
 
-            # Update cached releases list
             cached_releases = [r for r in cached_releases if r not in old_releases]
 
         except Exception as e:

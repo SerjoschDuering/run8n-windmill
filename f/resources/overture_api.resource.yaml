@@ -1,0 +1,4 @@
+value:
+  api_key: "DEMO-API-KEY"
+  base_url: "https://api.overturemapsapi.com"
+resource_type: c_overture_api

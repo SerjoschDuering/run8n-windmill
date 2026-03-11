@@ -1,23 +1,29 @@
-summary: 'Fetch OSM buildings via Overpass API'
-description: 'Fetches building footprints from OpenStreetMap with fallback endpoints. Returns GeoJSON with available height data.'
-lock: '!inline osm.script.lock'
+summary: Fetch OSM buildings via Overpass API
+description: >-
+  Fetches building footprints from OpenStreetMap with fallback endpoints.
+  Returns GeoJSON with available height data.
+lock: '!inline f/geo/fetchers/osm.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
   properties:
-    west:
-      type: number
-      description: 'Western longitude bound'
-    south:
-      type: number
-      description: 'Southern latitude bound'
     east:
       type: number
-      description: 'Eastern longitude bound'
+      description: Eastern longitude bound
+      default: null
     north:
       type: number
-      description: 'Northern latitude bound'
+      description: Northern latitude bound
+      default: null
+    south:
+      type: number
+      description: Southern latitude bound
+      default: null
+    west:
+      type: number
+      description: Western longitude bound
+      default: null
   required:
     - west
     - south

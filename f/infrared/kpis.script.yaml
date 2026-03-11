@@ -1,0 +1,61 @@
+summary: Calculate thermal/wind comfort KPIs from simulation grid
+description: >
+  Calculates comprehensive KPIs from UTCI or wind simulation results.
+
+  Includes category distributions, percentiles, and comfort analysis.
+
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/infrared/kpis
+
+
+  UTCI Categories (thermal stress levels):
+
+  - Comfortable: 9-26°C
+
+  - Moderate heat: 26-32°C
+
+  - Strong heat: 32-38°C
+
+
+  Wind Categories (Lawson criteria):
+
+  - Calm (<2 m/s): Sitting
+
+  - Light (2-4 m/s): Standing
+
+  - Moderate (4-6 m/s): Strolling
+
+  - Uncomfortable (>6 m/s): Fast walking only
+lock: '!inline f/infrared/kpis.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    analysis_type:
+      type: string
+      description: Type of analysis for appropriate KPI calculation
+      default: null
+      enum:
+        - utci
+        - wind
+      originalType: enum
+    buildings_count:
+      type: integer
+      description: Optional building count for site context
+      default: null
+    grid:
+      type: array
+      description: 512x512 simulation result grid
+      default: null
+      items:
+        type: object
+      originalType: 'object[]'
+    trees_count:
+      type: integer
+      description: Optional tree count for site context
+      default: null
+  required:
+    - grid
+    - analysis_type

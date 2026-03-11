@@ -1,0 +1,13 @@
+schema:
+  type: object
+  properties:
+    token:
+      type: string
+      description: NocoDB xc-token for ir-github-audit base
+    base_url:
+      type: string
+      description: NocoDB API base URL (internal Docker network)
+      default: "http://nocodb:8080/api/v2"
+  required:
+    - token
+description: NocoDB connection for GitHub audit data storage

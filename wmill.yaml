@@ -10,6 +10,9 @@ excludes:
   - "**/node_modules/**"
   - "**/__pycache__/**"
   - "**/.venv/**"
+  # Project-specific scripts - managed in their own repos, not here
+  # See: ~/.claude/skills/run8n-stack/services/windmill-sync-patterns.md
+  - "f/external_projects/**"
 
 # What to sync (defaults are safe for git)
 skipVariables: true    # Keep env config in Windmill UI

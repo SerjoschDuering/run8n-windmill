@@ -1,0 +1,87 @@
+summary: Generate Markdown environmental analysis report
+description: >
+  Creates structured Markdown reports from environmental analysis results.
+
+  Includes executive summary, statistics, recommendations, and methodology.
+
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/infrared/report_markdown
+lock: '!inline f/infrared/report_markdown.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    agent_notes:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    ai_summary:
+      type: object
+      description: ''
+      default: null
+      properties: {}
+    analyses:
+      type: object
+      description: ''
+      default: null
+    analysis_name:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    analysis_type:
+      type: string
+      default: null
+      originalType: string
+    bbox:
+      type: object
+      description: 'Bounding box {west, south, east, north}'
+      default: null
+      properties: {}
+    buildings_count:
+      type: integer
+      description: Number of buildings in analysis
+      default: null
+    gemini_context:
+      type: object
+      description: Optional Gemini enrichment results
+      default: null
+      properties: {}
+    kpis:
+      type: object
+      description: KPIs from f/infrared/kpis
+      default: null
+      properties: {}
+    location_name:
+      type: string
+      description: Human-readable location name
+      default: null
+      originalType: string
+    pin_results:
+      type: object
+      description: ''
+      default: null
+    screenshot_base64:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    site_context:
+      type: object
+      description: Optional site context
+      default: null
+      properties: {}
+    trees_count:
+      type: integer
+      description: Number of trees in analysis
+      default: null
+    weather:
+      type: object
+      description: Weather parameters used
+      default: null
+      properties: {}
+  required:
+    - location_name

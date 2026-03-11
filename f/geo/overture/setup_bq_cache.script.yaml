@@ -1,0 +1,15 @@
+summary: ''
+description: ''
+lock: '!inline f/geo/overture/setup_bq_cache.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: ''
+      default: null
+      properties: {}
+  required:
+    - db

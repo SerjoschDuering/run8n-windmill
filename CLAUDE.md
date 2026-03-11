@@ -26,6 +26,17 @@ f/
 2. **Secrets stay out of Git** - `wmill.yaml` skips secrets by default
 3. **Always commit before sync** - `wmill sync push` is destructive
 4. **Lock files are versioned** - ensures reproducible deployments
+5. **`f/external_projects/` is off-limits** - managed by individual project repos
+
+## What Goes Where
+
+| Path | Managed By | Example |
+|------|------------|---------|
+| `f/external_projects/*` | Individual project repos | cardScan, urban-toolkit |
+| `f/shared/`, `f/api/`, etc. | This monorepo | Shared utilities |
+
+**Project-specific scripts** live in their project's `windmill/` folder and sync independently.
+See: `~/.claude/skills/run8n-stack/services/windmill-sync-patterns.md`
 
 ## CLI Commands
 

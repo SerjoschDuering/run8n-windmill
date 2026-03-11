@@ -1,0 +1,80 @@
+summary: Fetch Overture Maps features via BigQuery
+description: 'Fetches features from Overture Maps via BigQuery — all 15 types
+  across 6 themes (buildings, land, water, infrastructure, transport, places,
+  addresses, divisions). Returns GeoJSON FeatureCollection or S3 reference.
+  Includes PostgreSQL result caching for cost optimization. Max bbox: 10 km².'
+lock: '!inline f/geo/fetchers/bq_overture.script.lock'
+kind: script
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  type: object
+  properties:
+    db:
+      type: object
+      description: PostgreSQL connection (Windmill resource)
+      default:
+        $res: f/geo/overture/postgres_db
+      properties: {}
+    east:
+      type: number
+      description: Eastern longitude bound (-180 to 180)
+      default: null
+    gcp:
+      type: object
+      description: GCP BigQuery credentials (Windmill resource)
+      default:
+        $res: f/geo/fetchers/gcp_bigquery
+      properties: {}
+    north:
+      type: number
+      description: Northern latitude bound (-90 to 90)
+      default: null
+    south:
+      type: number
+      description: Southern latitude bound (-90 to 90)
+      default: null
+    store_s3:
+      type: boolean
+      description: Write large results to S3 and return reference (default True)
+      default: true
+    types:
+      type: array
+      description: 'Feature types to fetch (all 15 Overture types supported): Base
+        theme (land, water, land_use, land_cover, infrastructure, bathymetry),
+        Buildings (building, building_part), Places (place), Transportation
+        (segment, connector), Addresses (address), Divisions (division,
+        division_area, division_boundary)'
+      default:
+        - building
+      items:
+        type: string
+        enum:
+          - land
+          - water
+          - land_use
+          - land_cover
+          - infrastructure
+          - bathymetry
+          - building
+          - building_part
+          - place
+          - segment
+          - connector
+          - address
+          - division
+          - division_area
+          - division_boundary
+      originalType: string[]
+    use_cache:
+      type: boolean
+      description: Use PostgreSQL result cache for cost optimization (default True)
+      default: true
+    west:
+      type: number
+      description: Western longitude bound (-180 to 180)
+      default: null
+  required:
+    - west
+    - south
+    - east
+    - north

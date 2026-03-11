@@ -1,0 +1,8 @@
+value:
+  host: "91.98.144.66"
+  port: 5432
+  user: "supabase_admin"
+  password: "$RUN8N_DB_PASSWORD"
+  dbname: "postgres"
+  sslmode: "disable"
+resource_type: postgresql

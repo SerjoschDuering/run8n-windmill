@@ -1,8 +1,9 @@
-summary: Fetch buildings from Overture Maps
+summary: Fetch features from Overture Maps
 description: >-
-  Fetches building footprints from Overture Maps (2.7B buildings globally).
-  Free, no auth needed. Sources: Google + Microsoft + OSM combined. Cache
-  enabled by default for 10x faster queries (6min → 30-60s).
+  Fetches features from Overture Maps — all 15 types across 6 themes (buildings,
+  land, water, infrastructure, transport, places, addresses, etc.). Free, no
+  auth needed. Sources: Google + Microsoft + OSM combined. Returns GeoJSON
+  FeatureCollection or S3 reference.
 lock: '!inline f/geo/fetchers/overture.script.lock'
 kind: script
 schema:
@@ -26,6 +27,38 @@ schema:
       type: number
       description: Southern latitude bound
       default: null
+    store_s3:
+      type: boolean
+      description: Write result to S3 and return reference (default True)
+      default: true
+    types:
+      type: array
+      description: >-
+        Feature types to fetch (all 15 Overture types supported): building,
+        building_part, land, water, land_use, land_cover, infrastructure, place,
+        segment, connector, address, division, division_area, division_boundary,
+        bathymetry
+      default:
+        - building
+      items:
+        type: string
+        enum:
+          - building
+          - building_part
+          - land
+          - water
+          - land_use
+          - land_cover
+          - infrastructure
+          - bathymetry
+          - place
+          - segment
+          - connector
+          - address
+          - division
+          - division_area
+          - division_boundary
+      originalType: 'string[]'
     use_cache:
       type: boolean
       description: Use PostgreSQL spatial cache for faster queries (default True)
@@ -39,3 +72,4 @@ schema:
     - south
     - east
     - north
+tag: ''

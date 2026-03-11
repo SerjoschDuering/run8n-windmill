@@ -1,0 +1,4 @@
+value:
+  token: "CHANGE_ME_IN_WINDMILL_UI"
+  base_url: "http://nocodb:8080/api/v2"
+resource_type: c_ir_audit_nocodb

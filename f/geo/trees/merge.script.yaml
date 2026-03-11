@@ -1,16 +1,22 @@
-summary: 'Merge and deduplicate tree data'
-description: 'Merges tree data from OSM and OpenTrees with spatial deduplication. Prefers municipal data when available.'
-lock: '!inline merge.script.lock'
+summary: Merge and deduplicate tree data
+description: >-
+  Merges tree data from OSM and OpenTrees with spatial deduplication. Prefers
+  municipal data when available.
+lock: '!inline f/geo/trees/merge.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
   properties:
-    osm_geojson:
-      type: object
-      description: 'GeoJSON FeatureCollection from OSM tree fetcher'
     opentrees_geojson:
       type: object
-      description: 'GeoJSON FeatureCollection from OpenTrees fetcher (optional)'
+      description: GeoJSON FeatureCollection from OpenTrees fetcher (optional)
+      default: null
+      properties: {}
+    osm_geojson:
+      type: object
+      description: GeoJSON FeatureCollection from OSM tree fetcher
+      default: null
+      properties: {}
   required:
     - osm_geojson

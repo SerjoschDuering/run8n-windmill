@@ -1,0 +1,21 @@
+summary: Geocode location string to coordinates
+description: >-
+  Converts location names to lat/lon using Nominatim API with city lookup
+  fallback for instant results on major cities.
+lock: '!inline f/geo/geocode.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    limit:
+      type: integer
+      description: Maximum number of results (default 1)
+      default: 1
+    query:
+      type: string
+      description: 'Location search string (e.g., "Hamburg", "Berlin Mitte")'
+      default: null
+      originalType: string
+  required:
+    - query

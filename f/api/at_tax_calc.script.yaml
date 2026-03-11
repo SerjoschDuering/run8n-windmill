@@ -13,6 +13,7 @@ description: >
 
   Example: {"gross_monthly": 3000, "revenue": 20000, "children": 1}
 lock: '!inline f/api/at_tax_calc.script.lock'
+kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object

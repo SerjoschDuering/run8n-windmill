@@ -1,0 +1,101 @@
+summary: Run Infrared.city UTCI or wind analysis
+description: >
+  Runs thermal comfort (UTCI) or wind speed CFD analysis via Infrared.city API.
+
+  Converts GeoJSON buildings/trees to 3D meshes with coordinate transformation.
+
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/infrared/simulate
+
+
+  Returns:
+    - grid: 512x512 values (UTCI in °C, wind in m/s)
+    - min, max, mean: Statistics
+    - bbox: Original bounding box
+lock: '!inline f/infrared/simulate.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    analysis_type:
+      type: string
+      description: 'Analysis type: utci for thermal comfort, wind for wind speed'
+      default: null
+      enum:
+        - utci
+        - wind
+      originalType: enum
+    buildings:
+      type: object
+      description: GeoJSON FeatureCollection from f/geo/flows/fetch_buildings
+      default: null
+      properties: {}
+    diffuse_horizontal_radiation:
+      type: number
+      description: ''
+      default: null
+    direct_normal_radiation:
+      type: number
+      description: ''
+      default: null
+    east:
+      type: number
+      description: Eastern longitude bound
+      default: null
+    global_horizontal_radiation:
+      type: number
+      description: ''
+      default: null
+    horizontal_infrared_radiation:
+      type: number
+      description: ''
+      default: null
+    hour:
+      type: integer
+      description: Hour (0-23) for UTCI solar calculations
+      default: 14
+    humidity:
+      type: number
+      description: Relative humidity percentage (UTCI only)
+      default: 50
+    month:
+      type: integer
+      description: Month (1-12) for UTCI solar calculations
+      default: 7
+    north:
+      type: number
+      description: Northern latitude bound
+      default: null
+    south:
+      type: number
+      description: Southern latitude bound
+      default: null
+    temperature:
+      type: number
+      description: Air temperature in Celsius (UTCI only)
+      default: 28
+    trees:
+      type: object
+      description: GeoJSON FeatureCollection from f/geo/trees/fetch
+      default: null
+      properties: {}
+    west:
+      type: number
+      description: Western longitude bound
+      default: null
+    wind_direction:
+      type: number
+      description: 'Wind direction in degrees (0=N, 90=E, 180=S, 270=W)'
+      default: 180
+    wind_speed:
+      type: number
+      description: Wind speed in m/s
+      default: 2.5
+  required:
+    - west
+    - south
+    - east
+    - north
+    - analysis_type

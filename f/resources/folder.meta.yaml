@@ -1,0 +1,6 @@
+summary: Shared resources
+display_name: resources
+owners:
+  - u/serdue
+extra_perms:
+  u/serdue: true

@@ -1,10 +1,14 @@
 summary: Daily GitHub org sync for Infrared-city
-schedule: "0 0 6 * * *"
-timezone: Europe/Berlin
-script_path: f/ir_audit/daily_sync
-is_flow: false
 args:
-  github_token: ""
-  nocodb_token: ""
+  github_token: ''
   lookback_days: 2
+  nocodb_token: ''
+cron_version: v2
+email: ser.due@me.com
 enabled: true
+is_flow: false
+no_flow_overlap: false
+schedule: 0 0 6 * * *
+script_path: f/ir_audit/daily_sync
+timezone: Europe/Berlin
+ws_error_handler_muted: false

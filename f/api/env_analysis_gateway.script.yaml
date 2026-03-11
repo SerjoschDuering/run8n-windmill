@@ -1,0 +1,22 @@
+summary: Environmental Analysis API Gateway
+description: |
+  Single entry point for env-analysis MCP server.
+  Routes requests to geo/infrared scripts with custom API key auth.
+lock: '!inline f/api/env_analysis_gateway.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    action:
+      type: string
+      description: Action to perform
+      default: null
+      originalType: string
+    params:
+      type: object
+      description: Parameters for the action
+      default: null
+      properties: {}
+  required:
+    - action

@@ -1,0 +1,6 @@
+# workspace-dependencies-mode: extra
+# py: 3.12
+numpy==1.26.4
+orjson==3.9.10
+psycopg2-binary==2.9.10
+shapely==2.0.2

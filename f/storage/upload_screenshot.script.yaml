@@ -1,0 +1,40 @@
+summary: Upload file to S3 (Backblaze B2)
+description: Uploads base64-encoded file to run8n-public bucket. Returns public URL.
+lock: '!inline f/storage/upload_screenshot.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    content_type:
+      type: string
+      description: MIME type
+      default: image/png
+      originalType: string
+    filename:
+      type: string
+      description: Custom filename
+      default: null
+      originalType: string
+    prefix:
+      type: string
+      description: S3 key prefix
+      default: screenshots
+      originalType: string
+    s3_key:
+      type: string
+      description: 'S3 access key (optional, uses Windmill resource)'
+      default: null
+      originalType: string
+    s3_secret:
+      type: string
+      description: 'S3 secret (optional, uses Windmill resource)'
+      default: null
+      originalType: string
+    screenshot_base64:
+      type: string
+      description: Base64-encoded file data
+      default: null
+      originalType: string
+  required:
+    - screenshot_base64

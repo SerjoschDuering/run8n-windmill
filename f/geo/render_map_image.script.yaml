@@ -1,0 +1,76 @@
+summary: Render 2.5D map image from simulation grid
+description: >-
+  Renders a static 2.5D map image with heatmap overlay, buildings, trees, and
+  pins using matplotlib. Returns base64 PNG.
+lock: '!inline f/geo/render_map_image.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    analysis_type:
+      type: string
+      description: 'Type of analysis: utci or wind'
+      default: null
+      enum:
+        - utci
+        - wind
+      originalType: enum
+    bbox:
+      type: object
+      description: 'Bounding box {west, south, east, north}'
+      default: null
+      format: resource-BBox
+    buildings:
+      type: object
+      description: GeoJSON FeatureCollection of buildings
+      default: null
+      properties: {}
+    grid:
+      type: array
+      description: 2D array of simulation values (512x512)
+      default: null
+      items:
+        type: string
+      originalType: 'string[]'
+    image_height:
+      type: integer
+      description: Output image height in pixels
+      default: 1024
+    image_width:
+      type: integer
+      description: Output image width in pixels
+      default: 1024
+    jpeg_quality:
+      type: integer
+      description: ''
+      default: 75
+    opacity:
+      type: number
+      description: Heatmap opacity (0-1)
+      default: 0.7
+    output_format:
+      type: string
+      description: ''
+      default: png
+      enum:
+        - png
+        - jpeg
+      originalType: enum
+    pins:
+      type: object
+      description: 'Array of pin objects {lat, lon, label}'
+      default: null
+    show_legend:
+      type: boolean
+      description: Show color legend bar
+      default: true
+    trees:
+      type: object
+      description: GeoJSON FeatureCollection of trees
+      default: null
+      properties: {}
+  required:
+    - bbox
+    - grid
+    - analysis_type

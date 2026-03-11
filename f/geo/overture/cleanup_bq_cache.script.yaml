@@ -1,0 +1,27 @@
+summary: ''
+description: ''
+lock: '!inline f/geo/overture/cleanup_bq_cache.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    db:
+      type: object
+      description: ''
+      default: null
+      properties: {}
+    dry_run:
+      type: boolean
+      description: ''
+      default: false
+    max_age_days:
+      type: integer
+      description: ''
+      default: 30
+    max_entries:
+      type: integer
+      description: ''
+      default: 1000
+  required:
+    - db

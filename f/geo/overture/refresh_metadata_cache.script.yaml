@@ -11,11 +11,5 @@ kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'
   type: object
-  properties:
-    db:
-      type: object
-      description: PostgreSQL connection (from resource picker)
-      default: null
-      properties: {}
-  required:
-    - db
+  properties: {}
+  required: []

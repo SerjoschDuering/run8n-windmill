@@ -1,0 +1,28 @@
+summary: Session store for batch environment analysis data
+description: |
+  CRUD for batch session state using Windmill internal state.
+  Stores KPIs, image URLs, pins, stats per batch.
+  Actions: save_batch, get_batch, update_sim, update_pins
+lock: '!inline f/infrared/session_store.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    action:
+      type: string
+      description: CRUD action to perform
+      default: null
+      enum:
+        - save_batch
+        - get_batch
+        - update_sim
+        - update_pins
+      originalType: enum
+    batch_id:
+      type: string
+      description: Batch identifier
+      default: null
+      originalType: string
+  required:
+    - action

@@ -1,0 +1,12 @@
+summary: Styled PDF class for environmental reports
+description: >-
+  Helper module providing StyledReportPDF class with cover page, stat cards,
+  styled tables, and callout boxes. Import with: from f.infrared.pdf_styles
+  import StyledReportPDF
+lock: '!inline f/infrared/pdf_styles.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties: {}
+  required: []

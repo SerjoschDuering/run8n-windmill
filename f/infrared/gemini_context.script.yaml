@@ -1,0 +1,65 @@
+summary: Enrich site analysis with Gemini web search
+description: >
+  Uses Gemini API with grounding to gather local climate and urban context.
+
+  Provides background information for environmental analysis reports.
+
+
+  Webhook: POST
+  https://windmill.run8n.xyz/api/w/windmill_automations/jobs/run_wait_result/f/infrared/gemini_context
+
+
+  Topics:
+
+  - climate: Local temperature, humidity, wind patterns
+
+  - urban_planning: Building density, green spaces, pedestrian areas
+
+  - heat_mitigation: Climate adaptation initiatives
+
+  - historical_context: Land use and historical significance
+lock: '!inline f/infrared/gemini_context.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    analysis_type:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    latitude:
+      type: number
+      description: Site latitude
+      default: null
+    location_name:
+      type: string
+      description: 'Human-readable location name (e.g., "Munich Marienplatz")'
+      default: null
+      originalType: string
+    longitude:
+      type: number
+      description: Site longitude
+      default: null
+    screenshot_base64:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    topics:
+      type: array
+      description: 'Topics to research (default: climate, urban_planning, heat_mitigation)'
+      default: null
+      items:
+        type: string
+        enum:
+          - climate
+          - urban_planning
+          - heat_mitigation
+          - historical_context
+      originalType: 'string[]'
+  required:
+    - location_name
+    - latitude
+    - longitude

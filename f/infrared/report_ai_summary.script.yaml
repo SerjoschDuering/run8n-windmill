@@ -1,0 +1,28 @@
+summary: ''
+description: ''
+lock: '!inline f/infrared/report_ai_summary.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    agent_notes:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+    analyses:
+      type: array
+      description: ''
+      default: null
+      items:
+        type: string
+      originalType: 'string[]'
+    location_name:
+      type: string
+      description: ''
+      default: null
+      originalType: string
+  required:
+    - location_name
+    - analyses
