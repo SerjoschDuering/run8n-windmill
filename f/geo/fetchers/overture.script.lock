@@ -13,4 +13,4 @@ psycopg2-binary==2.9.10
 pyarrow==23.0.1
 shapely==2.1.2
 typing-extensions==4.15.0
-wmill==1.642.0
+wmill==1.644.0
